@@ -58,10 +58,8 @@ class Univariate:
         return lesser,greater
     def applyRanges(dataset, descriptive, lesser, greater):
         for columName in lesser:
-            print('lesser',columName)
             dataset[columName][dataset[columName]<descriptive[columName]["Lesser"]]=descriptive[columName]["Lesser"]
         for columName in greater:
-            print('greater',columName)
             dataset[columName][dataset[columName]>descriptive[columName]["Greater"]]=descriptive[columName]["Greater"]
         return dataset
     def frequency(dataset):
