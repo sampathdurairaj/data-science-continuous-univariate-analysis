@@ -31,7 +31,8 @@ class Univariate:
             descriptive[columnName]["Mode"]= dataset[columnName].mode()[0]
         return descriptive
     def iqr(dataset, quan):
-        descriptive = pd.DataFrame(index=["Mean","Median","Mode","Q1:25%","Q2:50%","Q3:75%","Q4:100%","IQR","Min","Lesser","Max","Greater"],columns =quan)
+        descriptive = pd.DataFrame(index=["Mean","Median","Mode","Q1:25%","Q2:50%","Q3:75%","Q4:100%","IQR","Min","Lesser",
+                                          "Max","Greater"],columns =quan)
         for columName in quan:
             descriptive[columName]["Mean"] = dataset[columName].mean()
             descriptive[columName]["Median"] = dataset[columName].median()
@@ -47,6 +48,13 @@ class Univariate:
             descriptive[columName]["Max"] =  dataset[columName].max()
             descriptive[columName]["Greater"] =  descriptive[columName]["Q3:75%"] + 1.5 * descriptive[columName]["IQR"]
         return descriptive
+    def hsk(dataset, quan):
+        descriptive = pd.DataFrame(index=["skew","kurtosis"],columns =quan)
+        for columName in quan:
+            descriptive[columName]["skew"] =  dataset[columName].skew()
+            descriptive[columName]["kurtosis"] =   dataset[columName].kurtosis()
+        return descriptive 
+
     def lesserAndGreater(descriptive, quan):
         lesser =[]
         greater =[]
@@ -63,9 +71,10 @@ class Univariate:
             dataset[columName][dataset[columName]>descriptive[columName]["Greater"]]=descriptive[columName]["Greater"]
         return dataset
     def frequency(dataset):
-        freqTable = pd.DataFrame(columns=["Uniqiq_Values","Frequency","Relative_Frequency","Cumsum"])
-        freqTable["Uniqiq_Values"] = dataset["bedrooms"].value_counts().index
+        freqTable = pd.DataFrame(columns=["Unique_Values","Frequency","Relative_Frequency","Cumsum"])
+        freqTable["Unique_Values"] = dataset["bedrooms"].value_counts().index
         freqTable["Frequency"]  = dataset["bedrooms"].value_counts().values
-        freqTable["Relative_Frequency"]  = freqTable["Frequency"]/103
+        print(len(pd.DataFrame(dataset)))
+        freqTable["Relative_Frequency"]  = freqTable["Frequency"]/len(pd.DataFrame(dataset))
         freqTable["Cumsum"]  = freqTable["Relative_Frequency"].cumsum()
         return freqTable;
